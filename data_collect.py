@@ -1,5 +1,3 @@
-# script to collect images
-
 import cv2
 import os
 import sys
@@ -11,18 +9,18 @@ except:
     print("Arguments missing.")
     exit(-1)
 
-IMG_SAVE_PATH = 'training_data'
-IMG_CLASS_PATH = os.path.join(IMG_SAVE_PATH, label_name)
+data_path = 'training_data'
+type_path = os.path.join(data_path, label_name)
 
 try:
-    os.mkdir(IMG_SAVE_PATH)
+    os.mkdir(data_path)
 except FileExistsError:
     pass
+
 try:
-    os.mkdir(IMG_CLASS_PATH)
+    os.mkdir(type_path)
 except FileExistsError:
-    print("{} directory already exists.".format(IMG_CLASS_PATH))
-    print("All images gathered will be saved along with existing items in this folder")
+    pass
 
 cap = cv2.VideoCapture(0)
 start = False
@@ -40,7 +38,8 @@ while True:
     cv2.rectangle(frame, (100, 100), (500, 500), (255, 255, 255), 1)
     if start:
         img = frame[100:500, 100:500]
-        save_path = os.path.join(IMG_CLASS_PATH, '{}.jpg'.format(count + 1))
+        save_path = os.path.join(type_path, '{}.jpg'.format(count + 1))
+        # ret,img = cv2.threshold(img, 120, 255, cv2.THRESH_BINARY)
         cv2.imwrite(save_path, img)
         count += 1
 
@@ -57,6 +56,6 @@ while True:
     if k == ord('q'):
         break
 
-print("{} images saved to {}".format(count, IMG_CLASS_PATH))
+print("{} images saved to {}".format(count, type_path))
 cap.release()
 cv2.destroyAllWindows()
